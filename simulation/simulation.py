@@ -2,6 +2,7 @@ from models.lyft_system import LyftSystem
 from models.rider import Rider
 from models.driver import Driver
 import matplotlib.pyplot as plt
+import pandas as pd
 
 
 class Simulation:
@@ -66,8 +67,26 @@ class Simulation:
         self.run_simulation()
         self.analyze_results()
 
+    def compile_metrics_to_dataframe(self):
+        # Create a list to hold all rows before converting to DataFrame
+        all_metrics = []
+        
+        for take, monthly_metrics in self.detailed_metrics.items():
+            for month, metrics in enumerate(monthly_metrics, start=1):
+                metrics_row = {
+                    'Lyft Take': take,
+                    'Month': month,
+                    **metrics  # This unpacks all key-value pairs from the metrics dict directly into the row
+                }
+                all_metrics.append(metrics_row)
+        
+        # Convert the list of dictionaries to a DataFrame
+        metrics_df = pd.DataFrame(all_metrics)
+        return metrics_df
+
+
     def plot_metrics(self):
-        fig, axs = plt.subplot(2, 1, figsize=(10, 10))
+        fig, axs = plt.subplots(2, 1, figsize=(10, 10))
 
         for take, metrics in self.detailed_metrics.items():
             months = range(1, len(metrics) +1)

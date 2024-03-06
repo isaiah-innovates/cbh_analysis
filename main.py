@@ -19,6 +19,11 @@ def main():
     simulation.run()
     simulation.plot_metrics()
 
+    # Compile metrics to df
+    metrics_df = simulation.compile_metrics_to_dataframe()
+
+    # Save df to csv
+    metrics_df.to_csv('output.csv', index=False)
 
 if __name__ == "__main__":
     main()
